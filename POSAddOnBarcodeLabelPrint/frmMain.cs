@@ -443,7 +443,7 @@ namespace POSAddOnBarcodeLabelPrint
         {
             FontDialog fontDialog1 = new FontDialog();
             var result = fontDialog1.ShowDialog();
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 txtBarcodeLabelFont.Text = fontDialog1.Font.Name.ToString();
             }
@@ -478,8 +478,8 @@ namespace POSAddOnBarcodeLabelPrint
             try
             {
                 int PaperWidth = 0, PaperHeight = 0;
-                PaperWidth= (int)(double.Parse(txtPaperSizeWidth.Text)*100);
-                PaperHeight= (int)(double.Parse(txtPaperSizeHeight.Text)*100);
+                PaperWidth = (int)(double.Parse(txtPaperSizeWidth.Text) * 100);
+                PaperHeight = (int)(double.Parse(txtPaperSizeHeight.Text) * 100);
                 Bitmap b = new Bitmap(PaperWidth, PaperHeight);
                 Graphics g = Graphics.FromImage(b);
                 g.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, PaperWidth, PaperHeight)); // i used this code to make the background color white
@@ -489,8 +489,8 @@ namespace POSAddOnBarcodeLabelPrint
                 barCode.IncludeLabel = ckIncludeLabel.Checked;
                 barCode.Alignment = AlignmentPositions.Center;
                 //BarcodeLib barcodeType = cboBacodeType.SelectedItem.ToString();
-                Image imageBarcode = Image.FromStream(barCode.Encode(GetTypeSelected(), txtDataBarcode.Text.Trim(), _b.ForeColor, _b.BackColor,500,150).Encode().AsStream());
-                g.DrawImage(imageBarcode, Single.Parse(txtBarcodeX.Text), Single.Parse(txtBarcodeY.Text),int.Parse(txtBarcodeWidth.Text), int.Parse(txtBarcodeHeight.Text));
+                Image imageBarcode = Image.FromStream(barCode.Encode(GetTypeSelected(), txtSearchBarcode.Text.Trim(), _b.ForeColor, _b.BackColor, 500, 150).Encode().AsStream());
+                g.DrawImage(imageBarcode, Single.Parse(txtBarcodeX.Text), Single.Parse(txtBarcodeY.Text), int.Parse(txtBarcodeWidth.Text), int.Parse(txtBarcodeHeight.Text));
 
                 //Draw Name
                 Font NameFont = new Font(txtNameFont.Text, Single.Parse(txtNameFontSize.Text));
@@ -507,10 +507,10 @@ namespace POSAddOnBarcodeLabelPrint
                 {
                     PriceFont = new Font(txtPriceFont.Text, Single.Parse(txtPriceFontSize.Text), FontStyle.Bold);
                 }
-                g.DrawString(txtDataPrice.Text.ToString(), PriceFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtPriceX.Text), Single.Parse(txtPriceY.Text)));
+                g.DrawString("$" + txtDataPrice.Text.ToString(), PriceFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtPriceX.Text), Single.Parse(txtPriceY.Text)));
 
 
-                
+
 
                 pbBacodeLabel.Image = b;
             }
@@ -518,7 +518,7 @@ namespace POSAddOnBarcodeLabelPrint
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
 
         private Type GetTypeSelected()
@@ -564,7 +564,154 @@ namespace POSAddOnBarcodeLabelPrint
 
             return type;
         }
+
+        private void SearchItem()
+        {
+            string ColumnName = txtColumnName.Text;
+            string ColumnPrice = txtColumnPrice.Text;
+            string ColumnBarcode = txtColumnBarcode.Text;
+            string TableName = txtTableName.Text;
+            string strSearchBarcod = txtSearchBarcode.Text;
+
+            txtDataname.Text = "";
+            txtDataPrice.Text = "";
+
+            string strSQLString = @" SELECT top 1 " + ColumnName + @"," + ColumnPrice + @" FROM " + TableName + @" where " + ColumnBarcode + @"= '" + strSearchBarcod + @"'";
+
+            createConnectionString();
+            SqlConnection adoCon = new SqlConnection();
+            adoCon.ConnectionString = connectionString;
+            adoCon.Open();
+            SqlCommand command = new SqlCommand(strSQLString, adoCon);
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    txtDataname.Text = reader[ColumnName].ToString();
+                    txtDataPrice.Text = decimal.Parse(reader[ColumnPrice].ToString()).ToString("0.##");
+                }
+            }
+            reader.Close();
+        }
+        private void txtSearchBarcode_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                SearchItem();
+                if (ckAutoPrint.Checked)
+                {
+                    int PaperWidth = 0, PaperHeight = 0;
+                    PaperWidth = (int)(double.Parse(txtPaperSizeWidth.Text) * 100);
+                    PaperHeight = (int)(double.Parse(txtPaperSizeHeight.Text) * 100);
+                    printDocument1.DefaultPageSettings.Landscape = false;
+                    printDocument1.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("POSAddOn", PaperWidth, PaperHeight);
+                    printDocument1.PrinterSettings.PrinterName = txtPrinter.Text;
+                    printDocument1.Print();
+                }
+                txtSearchBarcode.SelectAll();
+                txtSearchBarcode.Focus();
+            }
+        }
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+
+            SearchItem();
+            
+            txtSearchBarcode.SelectAll();
+            txtSearchBarcode.Focus();
+
+        }
+        private void InitializePrintPreviewDialog()
+        {
+
+            // Create a new PrintPreviewDialog using constructor.
+            this.printPreviewDialog1 = new PrintPreviewDialog();
+
+            //Set the size, location, and name.
+            this.printPreviewDialog1.ClientSize =
+                new System.Drawing.Size(400, 300);
+            this.printPreviewDialog1.Location =
+                new System.Drawing.Point(29, 29);
+            this.printPreviewDialog1.Name = "PrintPreviewDialog1";
+
+            // Associate the event-handling method with the 
+            // document's PrintPage event.
+            //this.PrintDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintDocument1_PrintPage);
+
+            // Set the minimum size the dialog can be resized to.
+            this.printPreviewDialog1.MinimumSize =
+                new System.Drawing.Size(600, 300);
+
+            // Set the UseAntiAlias property to true, which will allow the 
+            // operating system to smooth fonts.
+            this.printPreviewDialog1.UseAntiAlias = true;
+        }
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            int PaperWidth = 0, PaperHeight = 0;
+            PaperWidth = (int)(double.Parse(txtPaperSizeWidth.Text) * 100);
+            PaperHeight = (int)(double.Parse(txtPaperSizeHeight.Text) * 100);
+            printDocument1.DefaultPageSettings.Landscape = ckLandscape.Checked;
+            printDocument1.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("POSAddOn", PaperWidth, PaperHeight);
+            printDocument1.PrinterSettings.PrinterName = txtPrinter.Text;
+            printDocument1.Print();
+        }
+        private void btnPrintPreview_Click(object sender, EventArgs e)
+        {
+            InitializePrintPreviewDialog();
+            int PaperWidth = 0, PaperHeight = 0;
+            PaperWidth = (int)(double.Parse(txtPaperSizeWidth.Text) * 100);
+            PaperHeight = (int)(double.Parse(txtPaperSizeHeight.Text) * 100);
+            printDocument1.DefaultPageSettings.Landscape = ckLandscape.Checked;
+            printDocument1.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("POSAddOn", PaperWidth, PaperHeight);
+            printPreviewDialog1.Document = printDocument1;
+            printPreviewDialog1.ShowDialog();
+
+        }
+
+        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            int PaperWidth = 0, PaperHeight = 0;
+            //PaperWidth = (int)(double.Parse(txtPaperSizeWidth.Text) * 100);
+            //PaperHeight = (int)(double.Parse(txtPaperSizeHeight.Text) * 100);
+            //Bitmap b = new Bitmap(PaperWidth, PaperHeight);
+            //Graphics g = Graphics.FromImage(b);
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, PaperWidth, PaperHeight)); // i used this code to make the background color white
+
+            //Draw Barcode
+            var barCode = new Barcode();
+            barCode.IncludeLabel = ckIncludeLabel.Checked;
+            barCode.Alignment = AlignmentPositions.Center;
+            //BarcodeLib barcodeType = cboBacodeType.SelectedItem.ToString();
+            Image imageBarcode = Image.FromStream(barCode.Encode(GetTypeSelected(), txtSearchBarcode.Text.Trim(), _b.ForeColor, _b.BackColor, 500, 150).Encode().AsStream());
+            e.Graphics.DrawImage(imageBarcode, Single.Parse(txtBarcodeX.Text), Single.Parse(txtBarcodeY.Text), int.Parse(txtBarcodeWidth.Text), int.Parse(txtBarcodeHeight.Text));
+
+            //Draw Name
+            Font NameFont = new Font(txtNameFont.Text, Single.Parse(txtNameFontSize.Text));
+            if (ckNameBold.Checked)
+            {
+                NameFont = new Font(txtNameFont.Text, Single.Parse(txtNameFontSize.Text), FontStyle.Bold);
+            }
+            e.Graphics.DrawString(txtDataname.Text.ToString(), NameFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtNameX.Text), Single.Parse(txtNameY.Text)));
+
+
+            //Draw Price
+            Font PriceFont = new Font(txtPriceFont.Text, Single.Parse(txtPriceFontSize.Text));
+            if (ckPriceBold.Checked)
+            {
+                PriceFont = new Font(txtPriceFont.Text, Single.Parse(txtPriceFontSize.Text), FontStyle.Bold);
+            }
+            e.Graphics.DrawString("$" + txtDataPrice.Text.ToString(), PriceFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtPriceX.Text), Single.Parse(txtPriceY.Text)));
+
+
+            e.HasMorePages = false;
+
+        }
+
+
     }
 
-    
+
 }
