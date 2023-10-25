@@ -129,6 +129,8 @@
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ckAutoPrint = new System.Windows.Forms.CheckBox();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearchBarcode = new System.Windows.Forms.TextBox();
             this.txtDataPrice = new System.Windows.Forms.TextBox();
             this.txtDataname = new System.Windows.Forms.TextBox();
@@ -136,8 +138,6 @@
             this.label39 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.btnPrint = new System.Windows.Forms.Button();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.ckAutoPrint = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBacodeLabel)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -1072,6 +1072,26 @@
             this.panel1.Size = new System.Drawing.Size(323, 144);
             this.panel1.TabIndex = 40;
             // 
+            // ckAutoPrint
+            // 
+            this.ckAutoPrint.AutoSize = true;
+            this.ckAutoPrint.Location = new System.Drawing.Point(105, 42);
+            this.ckAutoPrint.Name = "ckAutoPrint";
+            this.ckAutoPrint.Size = new System.Drawing.Size(133, 17);
+            this.ckAutoPrint.TabIndex = 48;
+            this.ckAutoPrint.Text = "Auto Print after Search";
+            this.ckAutoPrint.UseVisualStyleBackColor = true;
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(246, 12);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(60, 23);
+            this.btnSearch.TabIndex = 47;
+            this.btnSearch.Text = "Search";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // txtSearchBarcode
             // 
             this.txtSearchBarcode.Location = new System.Drawing.Point(54, 14);
@@ -1086,7 +1106,7 @@
             this.txtDataPrice.Name = "txtDataPrice";
             this.txtDataPrice.Size = new System.Drawing.Size(169, 20);
             this.txtDataPrice.TabIndex = 44;
-            this.txtDataPrice.Text = "$99.99";
+            this.txtDataPrice.Text = "999.99";
             // 
             // txtDataname
             // 
@@ -1133,26 +1153,6 @@
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
-            // btnSearch
-            // 
-            this.btnSearch.Location = new System.Drawing.Point(246, 12);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(60, 23);
-            this.btnSearch.TabIndex = 47;
-            this.btnSearch.Text = "Search";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
-            // ckAutoPrint
-            // 
-            this.ckAutoPrint.AutoSize = true;
-            this.ckAutoPrint.Location = new System.Drawing.Point(105, 42);
-            this.ckAutoPrint.Name = "ckAutoPrint";
-            this.ckAutoPrint.Size = new System.Drawing.Size(133, 17);
-            this.ckAutoPrint.TabIndex = 48;
-            this.ckAutoPrint.Text = "Auto Print after Search";
-            this.ckAutoPrint.UseVisualStyleBackColor = true;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1192,6 +1192,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pbBacodeLabel);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

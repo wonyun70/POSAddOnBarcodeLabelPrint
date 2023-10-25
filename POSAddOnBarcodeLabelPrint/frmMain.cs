@@ -494,20 +494,37 @@ namespace POSAddOnBarcodeLabelPrint
 
                 //Draw Name
                 Font NameFont = new Font(txtNameFont.Text, Single.Parse(txtNameFontSize.Text));
+                // Create a StringFormat object with the each line of text, and the block
+                // of text centered on the page.
+                StringFormat stringFormat = new StringFormat();
+                switch (cboNameAlignment.SelectedItem.ToString().Trim().ToLower())
+                {
+                    case "left": stringFormat.Alignment = StringAlignment.Near; break;
+                    case "right": stringFormat.Alignment = StringAlignment.Far; break;
+                    default: stringFormat.Alignment = StringAlignment.Center; break;
+                }
+                //stringFormat.Alignment = StringAlignment.Center;
+                //stringFormat.LineAlignment = StringAlignment.Center;
                 if (ckNameBold.Checked)
                 {
                     NameFont = new Font(txtNameFont.Text, Single.Parse(txtNameFontSize.Text), FontStyle.Bold);
                 }
-                g.DrawString(txtDataname.Text.ToString(), NameFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtNameX.Text), Single.Parse(txtNameY.Text)));
+                g.DrawString(txtDataname.Text.ToString(), NameFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtNameX.Text), Single.Parse(txtNameY.Text)), stringFormat);
 
 
                 //Draw Price
                 Font PriceFont = new Font(txtPriceFont.Text, Single.Parse(txtPriceFontSize.Text));
+                switch (cboPriceAlignment.SelectedItem.ToString().Trim().ToLower())
+                {
+                    case "left": stringFormat.Alignment = StringAlignment.Near; break;
+                    case "right": stringFormat.Alignment = StringAlignment.Far; break;
+                    default: stringFormat.Alignment = StringAlignment.Center; break;
+                }
                 if (ckPriceBold.Checked)
                 {
                     PriceFont = new Font(txtPriceFont.Text, Single.Parse(txtPriceFontSize.Text), FontStyle.Bold);
                 }
-                g.DrawString("$" + txtDataPrice.Text.ToString(), PriceFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtPriceX.Text), Single.Parse(txtPriceY.Text)));
+                g.DrawString("$" + txtDataPrice.Text.ToString(), PriceFont, new SolidBrush(Color.Black), new PointF(Single.Parse(txtPriceX.Text), Single.Parse(txtPriceY.Text)), stringFormat);
 
 
 
