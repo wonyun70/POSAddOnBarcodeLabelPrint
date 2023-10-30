@@ -20,10 +20,9 @@ Then, when you scan the barcode, it will retrieve the code from the database and
 	Column (Barcode) : ItemNum
 When you scan production barcode at itemNo textbox, search item at database	
 
-![Alt text](BarcodeStandard/examples/upca.jpg?raw=true "UPC-A")
 
 ### Support ###
-If you find this or any of my software useful and decide its worth supporting.  You can do so here:  [![Donate](https://www.paypal.com/donate/?business=WA7K74M5VX8MN&no_recurring=0&currency_code=USD)
+If you find this or any of my software useful and decide its worth supporting.  You can do so here:  [Donate](https://www.paypal.com/donate/?business=WA7K74M5VX8MN&no_recurring=0&currency_code=USD)
 
 ### Copyright and license ###
 
