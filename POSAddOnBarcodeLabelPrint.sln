@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA3B7024-0152-46DA-A883-20746C6FEFE4}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE.txt = LICENSE.txt
+		POSAddOnBarcodeLabelPrint\pcAmerica.xml = POSAddOnBarcodeLabelPrint\pcAmerica.xml
 		README.md = README.md
 	EndProjectSection
 EndProject

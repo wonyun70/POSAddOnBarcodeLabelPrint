@@ -707,6 +707,15 @@ namespace POSAddOnBarcodeLabelPrint
 
             //Draw Name
             Font NameFont = new Font(txtNameFont.Text, Single.Parse(txtNameFontSize.Text));
+            // Create a StringFormat object with the each line of text, and the block
+            // of text centered on the page.
+            StringFormat stringFormat = new StringFormat();
+            switch (cboNameAlignment.SelectedItem.ToString().Trim().ToLower())
+            {
+                case "left": stringFormat.Alignment = StringAlignment.Near; break;
+                case "right": stringFormat.Alignment = StringAlignment.Far; break;
+                default: stringFormat.Alignment = StringAlignment.Center; break;
+            }
             if (ckNameBold.Checked)
             {
                 NameFont = new Font(txtNameFont.Text, Single.Parse(txtNameFontSize.Text), FontStyle.Bold);
@@ -716,6 +725,12 @@ namespace POSAddOnBarcodeLabelPrint
 
             //Draw Price
             Font PriceFont = new Font(txtPriceFont.Text, Single.Parse(txtPriceFontSize.Text));
+            switch (cboPriceAlignment.SelectedItem.ToString().Trim().ToLower())
+            {
+                case "left": stringFormat.Alignment = StringAlignment.Near; break;
+                case "right": stringFormat.Alignment = StringAlignment.Far; break;
+                default: stringFormat.Alignment = StringAlignment.Center; break;
+            }
             if (ckPriceBold.Checked)
             {
                 PriceFont = new Font(txtPriceFont.Text, Single.Parse(txtPriceFontSize.Text), FontStyle.Bold);
